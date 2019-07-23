@@ -197,3 +197,5 @@ GET可以加上requestbody，同样POST也可以加上url参数，技术上完�
 最后GET和POST还有一个重大的区别，就是GET只会产生一个TCP数据包，而POST产生两个TCP数据包。
 
 对于GET请求方式，浏览器会把http header和一块发送出去，而对于POST请求，浏览器会发送header，服务器响应100 continue，浏览器再发送data，服务器响应返回数据。因此POST请求消耗的事件更多一点，看起来GET比POST更高效。实际上环境好的情况下，发送一次TCP数据包和发送两次数据包消耗的时间差是可以忽略的。但是在网络环境差的情况下，两次TCP在验证数据包的完整性上，是有非常大的优点的。同时并不是所有的浏览器POST都会发送两次数据包，FireFox就只发送一次。
+
+<Gitalk></Gitalk>

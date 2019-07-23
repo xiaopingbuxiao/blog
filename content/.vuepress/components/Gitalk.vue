@@ -4,12 +4,14 @@
   </div>
 </template>
 <script>
+import md5 from 'md5'
 export default {
   name: 'Gitalk',
   data() {
     return {};
   },
   mounted() {
+    console.log(md5(location.pathname))
     let body = document.querySelector('.gitalk-container');
     let script = document.createElement('script');
     let css = document.createElement('link')
@@ -28,7 +30,7 @@ export default {
         admin: 'xiaopingbuxiao',
         // id 用于当前页面的唯一标识，一般来讲 pathname 足够了，
         // 但是如果你的 pathname 超过 50 个字符，GitHub 将不会成功创建 issue，此情况可以考虑给每个页面生成 hash 值的方法.
-        id: (location.pathname).split('/')[0].slice(0,49),
+        id: md5(location.pathname),
         distractionFreeMode: false,
       };
       const gitalk = new Gitalk(commentConfig);
