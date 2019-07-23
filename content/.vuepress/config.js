@@ -5,7 +5,7 @@ module.exports = {
   base: "",
   dest: "docs",
   head: [
-    // ["link", { rel: "icon", href: "/favicon.ico" }]
+    ["link", { rel: "icon", href: "/favicon.ico" }]
   ],
   ga: "UA-139887373-1",
   serviceWorker: true,
