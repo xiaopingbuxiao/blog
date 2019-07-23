@@ -1,0 +1,13 @@
+{
+  "name": "blog",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "MIT",
+  "scripts": {
+    "content:dev": "vuepress dev content",
+    "content:build": "vuepress build content"
+  },
+  "devDependencies": {
+    "vuepress": "^1.0.2"
+  }
+}
