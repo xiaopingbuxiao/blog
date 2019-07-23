@@ -1,7 +1,7 @@
 ---
 home: true
 title: "小平不小"
-description: "一个野路子前端的学习笔记"
+description: "一个前端攻城狮的学习笔记"
 heroImage: ./avatar.jpeg
 actionText: 开始 →
 actionLink: /JavaScript/脚本化http

@@ -28,7 +28,7 @@
 </template>
 
 <script>
-import avatar from "../public/avatar.jpeg";
+import avatar from "../assets/avatar.jpeg";
 export default {
   data() {
     return {

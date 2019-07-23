@@ -16,7 +16,7 @@ export default {
     css.rel = 'stylesheet';
     css.href = 'https://unpkg.com/gitalk/dist/gitalk.css'
     script.src = 'https://unpkg.com/gitalk/dist/gitalk.min.js';
-    
+    body.appendChild(css)
     body.appendChild(script);
     script.onload = () => {
       const commentConfig = {
