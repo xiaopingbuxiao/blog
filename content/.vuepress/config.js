@@ -26,6 +26,7 @@ module.exports = {
     sidebar: {
       "/JavaScript/": [
         "脚本化http",
+        "bind实现"
       ],
       "/vue/": [
         {

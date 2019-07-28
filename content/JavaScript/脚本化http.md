@@ -8,7 +8,7 @@ ajax通过浏览器的XMLHttpRequest来实现，X代表XML。但是由于JSON更
 ```javascript
 function get(url, callback) {
   var request = new XMLHttpRequest()
-  request.send('get', url)
+  request.open('get', url)
   request.onreadystatechange = function() {
     if (request.readyState === 4 && request.status === 200) {
       var type = request.getResponseHeader('COnten-Type')

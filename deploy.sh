@@ -4,6 +4,6 @@ set -e
 
 npm run content:build
 cp {CNAME,favicon.ico,avatar.jpeg} docs/
-# git add -A
-# git commit -m '初始化'
+# git add .
+# git commit -m 'bind'
 # git push 
