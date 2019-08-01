@@ -86,3 +86,4 @@ Function.prototype.bind2 = function (oThis) {
   return fn
 }
 ```
+<Gitalk></Gitalk>

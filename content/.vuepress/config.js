@@ -1,7 +1,7 @@
 module.exports = {
   title: "小平不小",
   description: "一个野路子前端的学习笔记",
-  port:3000,
+  port: 3000,
   base: "",
   dest: "docs",
   head: [
@@ -15,8 +15,8 @@ module.exports = {
       {
         text: "前端栈",
         items: [
+          { text: "Vue", link: "/vue/object" },
           { text: "JavaScript", link: "/JavaScript/脚本化http" },
-          { text: "Vue", link: "/vue/" },
           { text: "nodeJS", link: "/nodeJS/" },
         ]
       },
@@ -29,10 +29,7 @@ module.exports = {
         "bind实现"
       ],
       "/vue/": [
-        {
-          title: "vue",
-          children: [""]
-        }
+        'object'
       ],
       "/nodeJS": ['']
     }
