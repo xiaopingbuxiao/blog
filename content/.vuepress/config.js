@@ -26,7 +26,8 @@ module.exports = {
     sidebar: {
       "/JavaScript/": [
         "脚本化http",
-        "bind实现"
+        "bind实现",
+        "canvas 合成多张图片"
       ],
       "/vue/": [
         'object'
