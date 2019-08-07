@@ -5,5 +5,5 @@ set -e
 npm run content:build
 cp {CNAME,favicon.ico,avatar.jpeg} docs/
 git add .
-git commit -m 'bug'
+git commit -m 'vue中array的处理'
 git push 

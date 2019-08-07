@@ -30,7 +30,8 @@ module.exports = {
         "canvas 合成多张图片"
       ],
       "/vue/": [
-        'object'
+        'object',
+        'array'
       ],
       "/nodeJS": ['']
     }
