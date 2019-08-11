@@ -27,7 +27,8 @@ module.exports = {
       "/JavaScript/": [
         "脚本化http",
         "bind实现",
-        "canvas 合成多张图片"
+        "canvas 合成多张图片",
+        "promise"
       ],
       "/vue/": [
         'object',
