@@ -16,7 +16,7 @@ module.exports = {
         text: "前端栈",
         items: [
           { text: "Vue", link: "/vue/object" },
-          { text: "JavaScript", link: "/JavaScript/脚本化http" },
+          { text: "JavaScript", link: "/JavaScript/promise" },
           { text: "nodeJS", link: "/nodeJS/" },
         ]
       },
@@ -25,10 +25,10 @@ module.exports = {
     ],
     sidebar: {
       "/JavaScript/": [
+        "promise",
         "脚本化http",
         "bind实现",
-        "canvas 合成多张图片",
-        "promise"
+        "canvas 合成多张图片"
       ],
       "/vue/": [
         'object',

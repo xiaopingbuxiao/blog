@@ -312,6 +312,83 @@ MyPromise.prototype.then = function (onFullifilledFn, onRejectedFn) {
     case 'pending':
       promise2 = new MyPromise((resolve, reject) => {
         self.onFullifilledCallbacks.push(() => {
+          try {
+            let temp = onFullifilledFn(self.value)
+            resolvePromise(promise2, temp, resolve, reject)
+          } catch (error) {
+            reject(error)
+          }
+
+        })
+        self.onRejectedCallbacks.push(() => {
+          try {
+            let temp = onRejectedFn(self.reason)
+            resolvePromise(promise2, temp, resolve, reject)
+          } catch (error) {
+            reject(error)
+          }
+        })
+      })
+      break;
+    case 'resolved':
+      // onFullifilledFn(self.value)
+      promise2 = new MyPromise((resolve, reject) => {
+        try {
+          let temp = onFullifilledFn(self.value)
+          resolvePromise(promise2, temp, resolve, reject)
+        } catch (error) {
+          reject(error)
+        }
+      })
+
+      break;
+    case 'rejected':
+      // onRejectedFn(self.reason)
+      promise2 = new MyPromise((resolve, reject) => {
+        try {
+          let temp = onRejectedFn(self.reason)
+          resolvePromise(promise2, temp, resolve, reject)
+        } catch (error) {
+          reject(error)
+        }
+      })
+      break;
+    default:
+      break;
+  }
+  return promise2
+}
+```
+此时如下的调用
+```javascript
+var p = new MyPromise((resolve, reject) => {
+  resolve(1)
+})
+
+p.then(res => {
+  console.log(res)
+})
+console.log('宏任务首先输出')
+//1 
+//宏任务首先输出
+
+```
+### then的回调函数执行的时机
+
+**此时发现js的输出顺序是有问题的。应该是先输出宏任务的 ，再输出微任务才对。**
+由于我们实现的Promise不能实现微任务的操作。因此我们需要使用 setTimeout 来进行模拟。使then函数的回调函数晚于宏任务(同步代码)执行。
+
+具体如下:
+```javascript
+MyPromise.prototype.then = function (onFullifilledFn, onRejectedFn) {
+  onFullifilledFn = typeof onFullifilledFn === 'function' ? onFullifilledFn : function (x) { return x }
+  onRejectedFn = typeof onRejectedFn === 'function' ? onRejectedFn : function (e) { throw e };
+  let self = this;
+  let promise2;
+  switch (self.status) {
+    case 'pending':
+      promise2 = new MyPromise((resolve, reject) => {
+        self.onFullifilledCallbacks.push(() => {
           setTimeout(() => {
             try {
               let temp = onFullifilledFn(self.value)
@@ -509,8 +586,77 @@ module.exports = MyPromise;
 npm install -g promises-aplus-tests 
 promises-aplus-tests MyPromise.js
 ```
-![promise-test](./images/promise2.png)
+![](./images/promise2.png)
+
+## promie实例方法
+### catch
+```javascript
+MyPromise.prototype.catch = function (onFullifilledFn) {
+  return this.then(null, onFullifilledFn)
+}
+```
+### finally
+```javascript
+MyPromise.prototype.finally = function (cb) {
+  return this.then(res => {
+    return MyPromise.resolve(cb()).then(res => {
+      return res
+    })
+  }, err => {
+    return MyPromise.resolve(cb()).then(() => {
+      throw err
+    })
+  })
+}
+```
+## promise的静态方法
+### Promise.resolve
+```javascript
+MyPromise.resolve = function (value) {
+  return new MyPromise((resolve, reject) => {
+    resolve(value)
+  })
+}
+```
+### Promise.reject
+```javascript
+MyPromise.reject = function (reason) {
+  return new MyPromise((resolve, reject) => {
+    reject(reason)
+  })
+}
+```
+### Promise.race
+```javascript
+MyPromise.race = function (promises) {
+  return new MyPromise((resolve, reject) => {
+    for (let i = 0; i < promises.length; i++) {
+      const promise = promises[i];
+      promise[i].then(resolve, reject)
+    }
+  })
+}
+```
+
+### Promise.all
+```javascript
+MyPromise.all = function (promises) {
+  let result = []
+  let index = 0
+  return new MyPromise((resolve, reject) => {
+    for (let i = 0; i < promises.length; i++) {
+      const promise = promises[i];
+      promise.then(res => {
+        result.push(res)
+        index++
+        if (index === promises.length) {
+          resolve(result)
+        }
+      }, reject)
+    }
+  })
+}
+```
 
 <Gitalk></Gitalk>
-
 
