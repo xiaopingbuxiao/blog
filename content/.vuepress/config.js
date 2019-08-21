@@ -33,7 +33,8 @@ module.exports = {
       "/vue/": [
         'object',
         'array',
-        'watch'
+        'watch',
+        'set-delete'
       ],
       "/nodeJS": ['']
     }
