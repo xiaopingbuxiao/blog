@@ -34,7 +34,8 @@ module.exports = {
         'object',
         'array',
         'watch',
-        'set-delete'
+        'set-delete',
+        'computed的实现'
       ],
       "/nodeJS": ['']
     }
