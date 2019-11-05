@@ -27,7 +27,7 @@ vm.aPlus = 3
 vm.a       // => 2
 vm.aDouble // => 4
 ```
-**计算属性最大的好处就是可以代替template中的表达式。** 如果我们在template中放入大量逻辑比较复杂的计算时，会是template中的逻辑过重。会对页面的可维护性造成很大的影响。computed实际的初衷就是为了结局这种问题。同时computed中有很多其他的优势，具体如下
+**计算属性最大的好处就是可以代替template中的表达式。** 如果我们在template中放入大量逻辑比较复杂的计算时，会使emplate中的逻辑过重，对页面的可维护性造成很大的影响。computed设计的初衷就是为了解决这种问题。同时computed中有很多其他的优势，具体如下
 
 **computed的优势**
 * 减少template中的逻辑，增加页面可维护性
@@ -35,9 +35,9 @@ vm.aDouble // => 4
 * computed的中的数据只有在使用时才会被调用执行计算
 
 
-那么computed中的是如果实现的，已经是如何被缓存的呢？ 下面是我自己的理解。如果有不正确的地方，欢迎支持🙏。
+那么computed中的是如果实现的，以及是如何被缓存的呢？ 
 
-## computed的初始化
+## computed的实现
 如果你对于vue数据的响应式变化如果还不理解，可以看我的前两篇文章 [如何实现对对象变化的监听](https://xiaopingbuxiao.com/vue/object.html),[如何实现对数组变化的监听](https://xiaopingbuxiao.com/vue/array.html)。
 
 言归正传，回到computed上面来，先来看computed数据的初始化：
