@@ -15,7 +15,7 @@ module.exports = {
       {
         text: "前端栈",
         items: [
-          { text: "Vue", link: "/vue/object" },
+          { text: "Vue", link: "/Vue/observer/object" },
           { text: "JavaScript", link: "/JavaScript/promise" },
           { text: "nodeJS", link: "/nodeJS/" },
         ]
@@ -30,12 +30,30 @@ module.exports = {
         "bind实现",
         "canvas 合成多张图片"
       ],
-      "/vue/": [
-        'object',
-        'array',
-        'watch',
-        'set-delete',
-        'computed的实现'
+      "/Vue/": [
+        {
+          title:'Vue的响应式',
+          path:'/Vue/observer/object',
+          collapsable:true,
+          sidebarDepth:2,
+          children: [
+            'observer/object',
+            'observer/array',
+            'observer/watch',
+            'observer/set-delete',
+            'observer/computed的实现'
+          ]
+        },
+        {
+          title:'Vue的init',
+          path:'/Vue/init/extend',
+          collapsable:true,
+          sidebarDepth:2,
+          children: [
+            'init/extend',
+            'init/Vue选项的合并-上'
+          ]
+        },
       ],
       "/nodeJS": ['']
     }
