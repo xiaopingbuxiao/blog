@@ -28,7 +28,17 @@ export function extend (to: Object, _from: ?Object): Object {
   return to
 }
 ```
-### 
+### hasOwn
+检查对象自身是否含有某个属性
+```js
+/**
+ * Check whether an object has the property.
+ */
+const hasOwnProperty = Object.prototype.hasOwnProperty
+export function hasOwn{
+  return hasOwnProperty.call(obj, key)
+}
+```
 
 
 

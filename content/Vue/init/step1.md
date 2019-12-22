@@ -537,19 +537,6 @@ directives:{
   update: fn
 }
 ```
-
-
-
-
-
-
-
-
-
-
-
-
-
 到现在为止，`Vue`将用户传入的 `props、inject、directives`已经完成了规范化的处理。之后进入下一个`if`分支：
 ```js
 if (!child._base) {
@@ -590,6 +577,19 @@ if (!child._base) {
 }
 ```
 下面我们那来看真正的合并策略。
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 ### 合并策略
@@ -839,18 +839,23 @@ var app = new Vue({
   }
 })
 ```
-第一次调用时，它是和 `Vue.options`来进行一个合并。上面我们已经知道`Vue.options`上面是不存在任何一个生命周期的，因此第一次之后一定是一个数组，再之后的操作也就顺其自然的一定是一个数组了。即`Vue`的生命周期在经过合并之后是变成了一个数组。
-
-### component、directive、filter的合并
+第一次调用时，它是和 `Vue.options`来进行一个合并。上面我们已经知道`Vue.options`上面是不存在任何一个生命周期的，因此第一次之后一定是一个数组，再之后的操作也就顺其自然的一定是一个数组了。即`Vue`的生命周期在经过合并之后是变成了一个数组，并且声明周期可以是一个数组，如下的调用完全是可以的，只是`Vue`文档中没有暴露此方法
+```js
+new Vue({
+  el: '#app1',
+  mounted: [
+    function fn() {
+      console.log(1)
+    },
+    function fn2() {
+      console.log(2)
+    }
+  ]
+})
+```
+## component、directive、filter的合并
 
 ```js
-/**
- * Assets
- *
- * When a vm is present (instance creation), we need to do
- * a three-way merge between constructor options, instance
- * options and parent options.
- */
 function mergeAssets(
   parentVal,
   childVal,

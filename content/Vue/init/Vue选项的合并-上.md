@@ -147,8 +147,6 @@ export function resolveConstructorOptions(Ctor) {
    * 如果有super属性的话 是使用 Vue.extend 来生成的  先用关注具体实现，只需要关注返回值 options
    * vm.constructor  就是Vue的构造函数 
    * 因此此时的options就是去获取Vue类上的静态属性 Vue.options 
-   * 继续去关注 何时挂载上的   
-   *  根据Vue的导入文件一直查找到 runtime/index.js
    */
   if (Ctor.super) {
     const superOptions = resolveConstructorOptions(Ctor.super)
@@ -173,7 +171,7 @@ export function resolveConstructorOptions(Ctor) {
 }
 ```
 函数的最开始直接定义一个变量 `let options = Ctor.options` 而 Ctor 参数是传入的 `vm.constructor`。此时也就是 Vue 的构造函数，因此 `Ctor.options` 其实就是
-`Vue.options`。再之后进入一个 if 判断。来判断 `Ctor.super` 。而 `Ctor.super` 在这里是不存在的（之前看了`Vue.extend`，我们知道通过`Vue.extend`来生成一个子类的时候才会存在`super`属性，这里先不做关注）。这里最终都是用来返回当前实例的构造函数上的 `options` 的。
+`Vue.options`。再之后进入一个 if 判断。来判断 `Ctor.super` 。而 `Ctor.super` 在这里是不存在的（之前看了`Vue.extend`，我们知道通过`Vue.extend`来生成一个子类的时候才会存在`super`属性，其他的这里先不做关注）。这里最终都是用来返回当前实例的构造函数上的 `options` 的。
 
 现在来看一下`Vue.options`是什么。全局搜索，很容易找到。在`core/global-api/index.js`上
 ```js
@@ -577,3 +575,5 @@ if (!child._base) {
 ```
 
 上面虽然已经在`mergeOptions`函数中了，但是都是在做一些选项的规范化的操作。之后才是真正的合并策略。
+<Gitalk></Gitalk>
+

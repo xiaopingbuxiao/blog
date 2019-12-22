@@ -120,7 +120,7 @@ if (process.env.NODE_ENV !== 'production' && name) {
   validateComponentName(name)
 }
 ```
-## Vue.extend继承的实现。
+## Vue.extend继承的实现
 
 ```js
 //1、定义一个子类
