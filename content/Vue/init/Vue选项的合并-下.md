@@ -307,10 +307,120 @@ export const ASSET_TYPES = [
   'filter'
 ]
 ```
-`component、directive、filter`三个的合并策略也是一样的，同样都是通过`mergeAssets`函数。首先通过 `parentVal||null`为原型来创建一个对象。如果存在 `childVal`的话在开发环境还要调用一个`assertObjectType`函数（只是一个校验函数，开发环境抛出警告），之后通过 `extend` 将 `childVal` 混入到`res`上。如果不存在`childVal`直接返回 `res`。
+`component、directive、filter`三个的合并策略也是一样的，同样都是通过`mergeAssets`函数。首先通过 `parentVal||null`为原型来创建一个对象。如果存在 `childVal`的话在开发环境还要调用一个`assertObjectType`函数（只是一个校验函数，开发环境抛出警告），之后通过 `extend` 将 `childVal` 混入到`res`上。如果不存在`childVal`直接返回 `res`。所有其实`component、directive、filter`的合并就是一个将`parentVal`作为`childVal`的`__proto__`
+```js
+new Vue({
+  el:'#app',
+  components:{
+    child:child
+  }
+})
+```
+此时合并完之后就是下面的样子
+```js
+{
+  child,
+  __proto__:{
+    KeepAlive,
+    Transition,
+    TransitionGroup
+  }
+}
+```
+
+
 
 ## watch合并策略
 
+```js
+strats.watch = function (
+  parentVal,
+  childVal,
+  vm,
+  key
+) {
+  // work around Firefox's Object.prototype.watch...
+  if (parentVal === nativeWatch) parentVal = undefined
+  if (childVal === nativeWatch) childVal = undefined  //这里只是为了除了firefox原生的watch函数
+  /* istanbul ignore if */
+  if (!childVal) return Object.create(parentVal || null)
+  if (process.env.NODE_ENV !== 'production') {
+    assertObjectType(key, childVal, vm)
+  }
+  if (!parentVal) return childVal
+  const ret = {}
+  //将parentVal的属性混合到 ret上面
+  extend(ret, parentVal)
+  //遍历childVal
+  for (const key in childVal) {
+    let parent = ret[key]
+    //遍历child的同时 如果父上面是不是一个数组就转为数组。
+    const child = childVal[key]
+    if (parent && !Array.isArray(parent)) {
+      parent = [parent]
+    }
+    // 之后就行一个数组的concat
+    ret[key] = parent
+      ? parent.concat(child)
+      : Array.isArray(child) ? child : [child]
+  }
+  return ret
+}
+```
+```js
+/* core/util/env.js */
+export const nativeWatch = ({}).watch
+```
+如果不存在 `childVal`直接返回 以`parentVal || null`为原型创建的对象。之后如果不存在 `parentVal`直接返回`childVal`。继续向下的话就代表这`childVal、parentVal`上面都存在。那么就需要进行一个合并操作。上面的代码还是笔记好理解的。通过上面的合并。同一个属性的`watch`可能会变成一个数组。
+
+
+
+## props、methods、inject、computed合并策略
+` props、methods、inject、computed`的合并策略相同，都是同一个函数。
+```js
+strats.props =
+  strats.methods =
+  strats.inject =
+  strats.computed = function (
+    parentVal,
+    childVal,
+    vm,
+    key
+  ) {
+    if (childVal && process.env.NODE_ENV !== 'production') {
+      assertObjectType(key, childVal, vm)
+    }
+    //如果不存在 parentVal 直接返回 childVal
+    if (!parentVal) return childVal
+    //否则的话就将创建一个空对象，将 parentVal childVal进行一个合并。
+    const ret = Object.create(null)
+    extend(ret, parentVal)
+    if (childVal) extend(ret, childVal)
+    return ret
+  }
+```
+`props、methods、inject、computed`的合并策略。总体就是如果`parentVal`不存在，直接返回`childVal`。如果`parentVal`存在`childVal` 也存在就将`parentVal、childVal`进行合并操作。**`extend(ret, childVal)`**操作之后会，如果`childVal`父覆盖掉`parentVal`上同名的属性。
+
+## provide合并策略
+
+```js
+strats.provide = mergeDataOrFn
+```
+直接使用`mergeDataOrFn`函数，和`data`的合并策略一致。
+
+
+## extends、mixins 的合并
+```js
+if (child.extends) {
+  parent = mergeOptions(parent, child.extends, vm)
+}
+if (child.mixins) {
+  for (let i = 0, l = child.mixins.length; i < l; i++) {
+    parent = mergeOptions(parent, child.mixins[i], vm)
+  }
+}
+```
+之前对于` extends、mixins`的操作，是直接跳过了。看完整个`mergeOptions`再来看。这两个都是为了解决`Vue`中的代码复用问题。对于`mixins`是一个数组，因此进行遍历合并。而`extends`比较简单，只能是一个对象，直接进行合并而无需遍历。
 
 
 
