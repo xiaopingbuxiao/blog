@@ -28,7 +28,8 @@ module.exports = {
         "promise",
         "脚本化http",
         "bind实现",
-        "canvas 合成多张图片"
+        "canvas 合成多张图片",
+        "composition"
       ],
       "/Vue/": [
         {

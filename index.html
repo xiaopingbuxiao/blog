@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Document</title>
+  <style>
+    * {
+      margin: 0;
+      padding: 0;
+    }
+  </style>
+</head>
+
+<body>
+  <input type="text" name="" id="ipt">
+  <script>
+    const input = document.querySelector('#ipt')
+    input.addEventListener('input',function(e){
+      console.log('input事件触发',e.target.value)
+    })
+    input.addEventListener('compositionstart',function(){
+      console.log('componsitionstart触发')
+    })
+    input.addEventListener('compositionupdate',function(){
+      console.log('compositionupdate触发')
+    })
+    input.addEventListener('compositionend',function(){
+      console.log('compositionend触发')
+    })
+  </script>
+</body>
+
+</html>
