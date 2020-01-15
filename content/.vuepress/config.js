@@ -29,7 +29,8 @@ module.exports = {
         "脚本化http",
         "bind实现",
         "canvas 合成多张图片",
-        "composition"
+        "composition",
+        "从element中学习ResizeObserver"
       ],
       "/Vue/": [
         {

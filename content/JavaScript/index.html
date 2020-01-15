@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta http-equiv="X-UA-Compatible" content="ie=edge" />
+    <title>Static Template</title>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      .box {
+        width: 100px;
+        height: 100px;
+        border: 2px solid red;
+        font-size: 40px;
+        user-select: none;
+      }
+      button {
+        width: 100px;
+        height: 40px;
+        margin: 10px 0;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="box1 box">box1</div>
+
+    <div class="box2 box">box2</div>
+    <button class="btn1">取消box1的监听</button>
+    <button class="btn2">取消所有的监听</button>
+    <script>
+      const resizeObserver = new ResizeObserver((entries, b) => {
+        for (let entry of entries) {
+          console.log(entries, b === resizeObserver);
+        }
+      });
+      const elbox1 = document.querySelector(".box1");
+      const elbox2 = document.querySelector(".box2");
+      resizeObserver.observe(elbox1);
+      resizeObserver.observe(elbox2);
+
+      elbox2.onclick = elbox1.onclick = function(e) {
+        e.target.style.width = e.target.offsetWidth + 10 + "px";
+      };
+      const elbtn1 = document.querySelector(".btn1");
+      const elbtn2 = document.querySelector(".btn2");
+      elbtn1.onclick = function() {
+        resizeObserver.unboserve(elbox1);
+      };
+      elbtn2.onclick = function() {
+        resizeObserver.disconnect();
+      };
+    </script>
+  </body>
+</html>
