@@ -26,7 +26,7 @@ function get(url, callback) {
 ```
 **XMLHttpRequest对象常用的函数、属性和事件**
 
-![XMLHttpRequest对象常用的函数、属性和事件](https://user-gold-cdn.xitu.io/2019/5/12/16aaa06f423a4f28?w=2604&h=994&f=jpeg&s=213139)
+![XMLHttpRequest对象常用的函数、属性和事件](./images/xhr.png)
 
 
 **MLHttpRequest对象常用的函数**
