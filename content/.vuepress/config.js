@@ -30,7 +30,8 @@ module.exports = {
         "bind实现",
         "canvas 合成多张图片",
         "composition",
-        "从element中学习ResizeObserver"
+        "从element中学习ResizeObserver",
+        "前端也需要了解的生产环境跨域问题"
       ],
       "/Vue/": [
         {
