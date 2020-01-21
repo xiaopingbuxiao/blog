@@ -165,7 +165,7 @@ if (pathname == '/preflight-post') {
   res.end(JSON.stringify(data))
 }
 ```
-其实按照上面的配置之后对于 `options` 请求，服务器默认帮我们处理为返回成功。添加代码如下
+其实按照上面的配置之后对于 `options` 请求，服务器默认帮我们处理为返回成功(`options`成功之后才能继续发送复杂请求)，因此不需要显式声明返回所有的`options`请求成功`。可以添加下面的测试代码：
 ```js
 if (pathname == '/preflight-post') {
   res.setHeader('Access-Control-Allow-Origin', '*')

@@ -31,7 +31,7 @@ module.exports = {
         "canvas 合成多张图片",
         "composition",
         "从element中学习ResizeObserver",
-        "前端也需要了解的生产环境跨域问题"
+        "前后端都用得上的cors设置"
       ],
       "/Vue/": [
         {
