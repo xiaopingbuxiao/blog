@@ -57,6 +57,7 @@ module.exports = {
             'init/Vue选项的合并-上'
           ]
         },
+        'vue中渲染函数观察者'
       ],
       "/nodeJS": ['']
     }
