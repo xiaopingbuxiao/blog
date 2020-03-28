@@ -81,3 +81,114 @@ var str1 = 'goodbye'
 str1.match(reg1) // ["goodbye"]
 ```
 由上可知，多选分支默认为惰性匹配。
+
+### 案例
+1. 匹配 16进制颜色值
+  ```js
+  var reg = /#([0-9a-fA-F]{6}|[0-9a-fA-F]{3})/g
+  var str = '#ffbbdb #Fc01DF #FFF #ffe'
+  str.match(reg) //  ["#ffbbdb", "#Fc01DF", "#FFF", "#ffe"]
+  ```
+2. 匹配时间
+  ```js
+  var reg = /^([01][0-9]|2[0-3]):[0-5][0-9]$/
+  reg.test('23:59') // true
+  reg.test('08:08') // true
+  ```
+3. 匹配日期
+  ```js
+  var reg = /^[0-9]{4}-(0[1-9]|1[0-2])-(0[1-9]|[12][0-9]|3[01])$/g
+  reg.test('2018-08-08') // true
+  ```
+3. 匹配 window 操作系统文件路径
+  ```js
+  var reg = /^[a-zA-Z]:\\([^\\:*<>|"?\r\n]+\\)*([^\\:*<>|"?\r\n]+)?$/
+  reg.test('F:\\study\\javascript\\reg\\index.md') // true
+  reg.test('F:\\study\\javascript\\reg\\') // true
+  ```
+4. 匹配 id
+  ```js
+  var reg = /id=".*"/g  // 贪婪匹配，会匹配到 id 后面的引号时不会停止
+  var str = '<div id="conteniner" class="main"></div>'
+  str.match(reg) // ["id="conteniner" class="main""]
+  // 改为 惰性匹配既可以解决 但是又会引起正则回溯问题 具体看下面
+  var reg1 = /id=".*?"/g
+  var reg2 = /id="[^"]*"/g
+  str.match(reg2) // ["id="conteniner""]
+  ```
+
+
+## 2、正则表达式位置匹配攻略
+es5中，共有6个位置的锚：
+锚     | 含义
+-------|-------
+^      | 匹配开头
+$      | 匹配结尾
+\b     | 单词的边界
+\B     | 非单词的边界
+(?=p)  | 匹配的位置之后要有 p   (正向先行断言)
+(?!p)   | 匹配的位置之后不能有 p (负向先行断言)
+(?<=y)x | x 前面有 y 的时候才匹配 x (后行断言)
+(?<!y)x | x 前面不能有 y 的时候才匹配 x (后行否定断言)
+
+### 2.1 \b 和 \B
+```js
+var str = '[js]lesson_o1.mp3'
+str.replace(/\b/g,'#')  //"[#js#]#lesson_o1#.#mp3#"
+str.replace(/\B/g,'#')  //"#[j#s]l#e#s#s#o#n#_#o#1.m#p#3"
+```
+
+### 2.2 (?=p) 和 (?!p)
+```js
+'hello'.replace(/(?=l)/g,'#') // "he#l#lo"
+'hello'.replace(/(?!l)/g,'#') // "#h#ell#o#"
+```
+### 2.3 (?<=y)x 和 (?<!y)x 
+
+```js
+var str = 'abcyxerx'
+str.replace(/(?<=y)x/g,'#') //"abcy#erx"
+str.replace(/(?<!y)x/g,'#') // "abcyxer#"
+```
+### 2.4 案例
+1. ***数字的千分位匹配*** 经典的使用正向先行断言案例:
+```js
+var str = '12345678'
+str.replace(/(?=\d{3}$)/,',') // "12345,678"
+// 此时只能匹配到最后面的三位 
+// 前面也要哭 三个字符一组 因此对于 \d{3} 增减量词
+str.replace(/(?=(\d{3})+$)/g,',') // "12,345,678"
+// 但是此时出现一个问题，数字的长度位 3 的倍数时，开头的第一位被匹配掉
+'123456789'.replace(/(?=(\d{3})+$)/g,',') // ",123,456,789"
+
+// 因此需要继续优化，要求匹配到的位置不能为开头 (?!^) 先行否定断言(负向先行断言)
+str.replace(/(?!^)(?=(\d{3})+$)/g,',')
+```
+2. 格式化
+根据上面的例子将货币格式话:
+```js
+function format(num){
+  return num.toFixed(2).replace(/\B(?=(\d{3})+\b)/g,",").replace(/^/,'$$')
+}
+format(1888) // $1,888.00
+```
+3. 密码问题 必须含有数字和字符
+* 必须包含数字
+```js
+var reg = /(?=.*[0-9])/  // 匹配的任意字符前面需要有数字
+```
+* 必须包含字符
+```js
+var reg = /(?=.*[a-zA-Z])/   // 匹配的任意字符前面需要有字母
+```
+整合之后
+```js
+var reg = /(?=.*[0-9])(?=.*[a-zA-Z])^[0-9a-zA-Z]{6,12}$/
+```
+**另一种解法**
+```js
+var reg = /(?!^[0-9]{6,12}$)(?!^[a-z]{6,12}$)(?!^[A-Z]{6,12}$)^[0-9A-Za-z]{6,12}$/
+```
+
+
+
