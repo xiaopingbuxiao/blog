@@ -192,3 +192,125 @@ var reg = /(?!^[0-9]{6,12}$)(?!^[a-z]{6,12}$)(?!^[A-Z]{6,12}$)^[0-9A-Za-z]{6,12}
 
 
 
+
+## 3、正则表达式中括号的作用
+
+1. 分组和分支结构
+  ```js
+  var reg = /(ab)+/
+  'ababa abbb ababab'.match(/(ab)+/g) // ["abab", "ab", "ababab"]
+  var reg = /(a|b)/g
+  ```
+2. 分组引用     
+  **用来提取数据:** `match` 函数接受的正则没有修饰符 `g` 的时候返回值如下。从第二位看时返回的是每个组中的具体值
+  ```js
+  var regex = /(\d{4})-(\d{2})-(\d{2})/;
+  '2018-08-08'.match(regex)  // ["2018-08-08", "2018", "08", "08", index: 0, input: "2018-08-08", groups: undefined]
+  regex.test('2018-08-08')
+  console.log(RegExp.$1,RegExp.$2,RegExp.$3) // 2018,08,08
+  ```
+3. 反向引用
+  ```js
+  var regex = /\d{4}(-|\/|\.)\d{2}(-|\/|\.)\d{2}/;
+  var string1 = "2017-06-12";
+  var string2 = "2017/06/12";
+  var string3 = "2017.06.12";
+  var string4 = "2016-06/12";
+  console.log( regex.test(string1) ); // true
+  console.log( regex.test(string2) ); // true
+  console.log( regex.test(string3) ); // true
+  console.log( regex.test(string4) ); // true  此种情况也被匹配到 
+  ``` 
+  假设我们想要求分割符前后一致，就需要使用反向引用：
+  ```js
+  var regex = /\d{4}(-|\/|\.)\d{2}\1\d{2}/;
+  var string1 = "2017-06-12";
+  var string2 = "2017/06/12";
+  var string3 = "2017.06.12";
+  var string4 = "2016-06/12";
+  console.log( regex.test(string1) ); // true
+  console.log( regex.test(string2) ); // true
+  console.log( regex.test(string3) ); // true
+  console.log( regex.test(string4) ); // false
+  ```
+  如上`\1` 就代表第一个组。同理可以使用`\2、\3` `\10`表示第10个括号。如果要匹配`\1和0`则使用`(?:\1)0`或者`\1(?:0)`。**`(?:)` 是非捕获分组，当你需要进行分组，但不需要捕获的时候使用，有助于提高性能。**        
+  **反向引用了不存在的分组的话，会作为普通的字符来进行匹配。**          
+  **分组后面有量词，分组后面有量词的话，分组最终捕获到的数据是最后一次的匹配**如下：
+  ```js
+  var regex = /(\d)+ \1/;
+  console.log( regex.test("12345 1") ); // false
+  console.log( regex.test("12345 5") ); // true
+  ```
+
+4. 非捕获组
+  括号会自动的捕获匹配到的数据，以便后续的使用，但是如果只是想要括号最原始的功能，匹配到的值在之后并不会使用到，可以使用非捕获括号来进行处理。`(?:p)`,`(?:p1|p2|p3)`
+
+
+#### 总结案例
+1. trim 的模拟
+```js
+function trim(str) {
+  return str.replace(/^\s+|\s+$/g, '');
+}
+function trim (str) {
+  return str.replace(/^\s*(.*?)\s*$/g, "$1");
+}
+```
+2. 将每个单词的首字母
+```js
+function titleize (str) {
+  return str.toLowerCase().replace(/(?:^|\s)\w/g, function (c) {
+    return c.toUpperCase();
+  });
+}
+```
+3. 驼峰化
+```js
+function camelize (str) {
+  return str.replace(/[-_\s]+(.)?/g, function (match, c) {
+    return c ? c.toUpperCase() : '';
+  })
+}
+```
+4. 中划线化
+```js
+function dasherize (str) {
+  return str.replace(/([A-Z])/g, '-$1').replace(/[-_\s]+/g, '-').toLowerCase();
+}
+```
+5. HTML 转义和反转义
+```js
+function escapeHTML (str) {
+  var escapeChars = {
+  '<' : 'lt',
+  '>' : 'gt',
+  '"' : 'quot',
+  '&' : 'amp',
+  '\'' : '#39'
+  };
+  return str.replace(new RegExp('[' + Object.keys(escapeChars).join('') +']', 'g'), function (match) {
+      return '&' + escapeChars[match] + ';';
+  });
+}
+escapeHTML('<div>你好世界</div>') // "&lt;div&gt;你好世界&lt;/div&gt;"
+```
+```js
+// 实体字符转换为等值的HTML。
+function unescapeHTML (str) {
+  var htmlEntities = {
+  nbsp: ' ',
+  lt: '<',
+  gt: '>',
+  quot: '"',
+  amp: '&',
+  apos: '\''
+  };
+  return str.replace(/\&([^;]+);/g, function (match, key) {
+    if (key in htmlEntities) {
+      return htmlEntities[key];
+    }
+    return match;
+  });
+}
+unescapeHTML("&lt;div&gt;你好世界&lt;/div&gt;") // "<div>你好世界</div>"
+```
