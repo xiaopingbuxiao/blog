@@ -18,6 +18,19 @@ scripts:
 
 after_success:
   - cp {CNAME,favicon.ico,avatar.jpeg} docs/
-  - git add .
-  - git commit -m "feat:update docs"
-  - git push -f "https://${GH_TOKEN}@${GH_REF}" HEAD:master
+  
+deploy:
+  # 这里指定了GitHub的pages服务
+  provider: pages
+  # Make sure you have skip_cleanup set to true, otherwise Travis CI will delete all the files created during the build,
+  # which will probably delete what you are trying to upload.
+  skip_cleanup: true
+  github_token: $GH_TOKEN
+  # 这里需要是true，否则会git push --force，把以前的记录覆盖了
+  keep_history: true
+  # 使用GitHub的用户名和邮箱
+  committer_from_gh: true
+  # 目标分支
+  target_branch: master
+  on:
+    branch: master
