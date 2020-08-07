@@ -20,4 +20,4 @@ after_success:
   - cp {CNAME,favicon.ico,avatar.jpeg} docs/
   - git add .
   - git commit -m "feat:update docs"
-  - git push
+  - git push origin HEAD:master
