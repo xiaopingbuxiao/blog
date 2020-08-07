@@ -2,7 +2,11 @@ language: node_js
 
 cache:
   npm: true
- 
+  
+# safelist
+branches:
+  only:
+  - master
 
 node_js: stable
 
