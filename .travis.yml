@@ -1,0 +1,20 @@
+language: node_js
+
+cache:
+  npm: true
+  
+# safelist
+branches:
+  only:
+  - master
+
+node_js: stable
+
+install:
+  - npm install 
+
+scripts:
+  - npm run content:build
+
+after_success:
+  - cp {CNAME,favicon.ico,avatar.jpeg} docs/
