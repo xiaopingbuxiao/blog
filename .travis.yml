@@ -2,9 +2,7 @@ language: node_js
 
 cache:
   npm: true
-
-cache:
- npm:true
+ 
 
 node_js: stable
 
@@ -13,3 +11,6 @@ install:
 
 scripts:
   - npm run content:build
+
+after_success:
+  - cp {CNAME,favicon.ico,avatar.jpeg} docs/
