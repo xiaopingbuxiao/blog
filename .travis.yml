@@ -12,4 +12,4 @@ install:
   - npm install 
 
 scripts:
-  - content:build
+  - npm run content:build
