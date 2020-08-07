@@ -5,7 +5,7 @@
   "license": "MIT",
   "scripts": {
     "content:dev": "vuepress dev content",
-    "content:build": "vuepress build content"
+    "content:build": "vuepress build content && cp {CNAME,favicon.ico,avatar.jpeg} docs/"
   },
   "devDependencies": {
     "vuepress": "^1.0.2"

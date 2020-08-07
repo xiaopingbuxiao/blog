@@ -1,0 +1,15 @@
+language: node_js
+
+cache:
+  npm: true
+
+cache:
+ npm:true
+
+node_js: stable
+
+install:
+  - npm install 
+
+scripts:
+  - npm run test
