@@ -598,15 +598,10 @@ MyPromise.prototype.catch = function (onFullifilledFn) {
 ### finally
 ```javascript
 MyPromise.prototype.finally = function (cb) {
-  return this.then(res => {
-    return MyPromise.resolve(cb()).then(res => {
-      return res
-    })
-  }, err => {
-    return MyPromise.resolve(cb()).then(() => {
-      throw err
-    })
-  })
+  return this.then(
+    res => Promise.resolve(cb()).then(() => res),
+    err => Promise.resolve(cb()).then(() => { throw err }),
+  )
 }
 ```
 ## promise的静态方法
@@ -647,7 +642,7 @@ MyPromise.all = function (promises) {
     for (let i = 0; i < promises.length; i++) {
       const promise = promises[i];
       promise.then(res => {
-        result.push(res)
+        result[i] = res
         index++
         if (index === promises.length) {
           resolve(result)
@@ -657,6 +652,48 @@ MyPromise.all = function (promises) {
   })
 }
 ```
+
+### Promise.retry
+```javascript
+Promise.retry = function (fn, count) {
+  const that = this
+  function retry(args, resolve, reject, count) {
+    console.log(count, '重试')
+    fn.apply(null, args).then(res => {
+      resolve(res)
+    }).catch(err => {
+      if (count <= 0) {
+        reject(err)
+      } else {
+        retry(args, resolve, reject, --count)
+      }
+    })
+  }
+  return function (...args) {
+    return new Promise((resolve, reject) => {
+      retry(args, resolve, reject, --count)
+    })
+  }
+}
+
+const fn = (value) => {
+  return new Promise((resolve, reject) => {
+    setTimeout(() => {
+      reject(value)
+    }, 1000)
+  })
+}
+
+const fnRetry = Promise.retry(fn, 3)
+fnRetry('ssss').then(res => {
+  console.log(res, 'res')
+}).catch(err => {
+  console.log(err, 'errr')
+})
+
+```
+
+
 
 <Gitalk></Gitalk>
 
